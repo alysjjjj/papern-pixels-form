@@ -332,6 +332,7 @@ footer {
   padding: 24px 10px 6px;
   color: var(--muted);
   font-size: 0.82rem;
+  margin-top: 10px;
 }
 
 /* ---------------- responsive ---------------- */
