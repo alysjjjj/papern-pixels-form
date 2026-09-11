@@ -189,7 +189,6 @@ textarea {
   background-color: #fbfaf8;
 }
 
-/* textareas cant be pill shaped, keep them rounded rectangle */
 textarea {
   border-radius: var(--radius-md);
   resize: vertical;
@@ -202,7 +201,7 @@ textarea:focus {
   border-color: var(--accent);
 }
 
-/* ---------------- pill toggle (segmented control) ---------------- */
+/* ---------------- pill togg ---------------- */
 .pill-toggle {
   display: flex;
   background-color:#eceaea;

@@ -1,3 +1,4 @@
+<!-- potanjna pano to -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,13 +14,13 @@
 
   <div class="page-wrap">
 
-    <!-- top bar -->
+
     <div class="topbar">
       <span class="logo-pill">Paper and Pixels</span>
       <span class="topbar-sub">Album &amp; Photo Printing</span>
     </div>
 
-    <!-- step indicator -->
+  
     <div class="steps" id="stepsIndicator">
       <div class="step-item active" data-step="1">
         <div class="step-circle">1</div>
@@ -48,7 +49,7 @@
    
     <div class="main-card">
 
-      <!-- ============ STEP 1 - name + service type ============ -->
+      <!-- ============  name + service type ============ -->
       <div class="step-panel active" id="panel1">
         <h2 class="panel-title">Let's start with your info</h2>
         <p class="panel-sub">Tell us your name and what you need today.</p>
@@ -74,10 +75,10 @@
         </div>
       </div>
 
-<!-- ============ STEP 2 - album or print details ============ -->
+<!-- ============ Salbum or print  ============ -->
 <div class="step-panel" id="panel2">
 
-  <!-- album details -->
+
   <div id="albumSection" class="hidden">
     <h2 class="panel-title">Album Details</h2>
     <p class="panel-sub">Pick the specs for your album.</p>
@@ -177,7 +178,7 @@
   </div>
 
 
-  <!-- print only details -->
+
   <div id="printSection" class="hidden">
 
     <h2 class="panel-title">Print Only Details</h2>
@@ -265,10 +266,9 @@
 </div>
 
 
-<!-- ============ PLACEHOLDER STYLING ============ -->
+
 <style>
 
-  /* Select placeholders */
   #productType:invalid,
   #albumSize:invalid,
   #colorTheme:invalid,
@@ -277,7 +277,7 @@
     opacity: 0.7;
   }
 
-  /* Selected values */
+
   #productType:valid,
   #albumSize:valid,
   #colorTheme:valid,
@@ -286,7 +286,7 @@
     opacity: 1;
   }
 
-  /* Number input placeholders */
+
   #albumQty::placeholder,
   #printQty::placeholder,
   #albumNote::placeholder,
@@ -297,7 +297,7 @@
 
 </style>
 
-      <!-- ============ STEP 3 - pictures ============ -->
+      <!-- ============ pictures ============ -->
 <div class="step-panel" id="panel3">
   <h2 class="panel-title">Add Your Pictures</h2>
   <p class="panel-sub">Paste a Google Drive link or attach files directly.</p>
@@ -328,7 +328,7 @@
 </div>
 
 
-<!-- ============ STEP 4 - receipt ============ -->
+<!-- ============  receipt ============ -->
 <div class="step-panel" id="panel4">
   <h2 class="panel-title">Order Receipt</h2>
   <p class="panel-sub">Here's a summary of your order.</p>
@@ -341,7 +341,7 @@
 </div>
 
 
-<!-- nav buttons -->
+
 <div class="nav-row">
   <button type="button" id="backBtn" class="outline-btn hidden">
     &larr; Back
@@ -354,13 +354,13 @@
 
 
 <style>
-  /* Google Drive placeholder */
+
   #gdriveLink::placeholder {
     color: #727070;
     opacity: 0.5;
   }
 
-  /* File selection text */
+
   #fileListText {
     color: #727070;
     opacity: 0.6;

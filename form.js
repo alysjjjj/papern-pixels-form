@@ -1,7 +1,4 @@
-// ======================================
-// PAPER AND PIXELS - script.js (v2, step wizard style)
-// ======================================
-
+// cahtgpt queen ubos dagat sayo
 var currentStep = 1;
 var totalSteps = 4;
 
