@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paper and Pixels - Order Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="form.css">
+
+
+</head>
+<body>
+
+  <div class="page-wrap">
+
+    <!-- top bar -->
+    <div class="topbar">
+      <span class="logo-pill">Paper and Pixels</span>
+      <span class="topbar-sub">Album &amp; Photo Printing</span>
+    </div>
+
+    <!-- step indicator -->
+    <div class="steps" id="stepsIndicator">
+      <div class="step-item active" data-step="1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Your Info</div>
+      </div>
+      <div class="step-line" data-line="1"></div>
+
+      <div class="step-item" data-step="2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Details</div>
+      </div>
+      <div class="step-line" data-line="2"></div>
+
+      <div class="step-item" data-step="3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Pictures</div>
+      </div>
+      <div class="step-line" data-line="3"></div>
+
+      <div class="step-item" data-step="4">
+        <div class="step-circle">4</div>
+        <div class="step-label">Receipt</div>
+      </div>
+    </div>
+
+   
+    <div class="main-card">
+
+      <!-- ============ STEP 1 - name + service type ============ -->
+      <div class="step-panel active" id="panel1">
+        <h2 class="panel-title">Let's start with your info</h2>
+        <p class="panel-sub">Tell us your name and what you need today.</p>
+
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" placeholder="Juan Dela Cruz">
+
+        </div>
+        <style>
+            #fullName::placeholder {
+                color: #727070;
+                opacity: 0.5;
+            }
+</style>
+
+        <div class="form-group">
+          <label>What do you need?</label>
+          <div class="pill-toggle" id="serviceToggle">
+            <button type="button" class="pill-option" data-value="print">Print Only</button>
+            <button type="button" class="pill-option" data-value="album">Print and Album</button>
+          </div>
+        </div>
+      </div>
+
+<!-- ============ STEP 2 - album or print details ============ -->
+<div class="step-panel" id="panel2">
+
+  <!-- album details -->
+  <div id="albumSection" class="hidden">
+    <h2 class="panel-title">Album Details</h2>
+    <p class="panel-sub">Pick the specs for your album.</p>
+
+    <div class="form-group">
+      <label for="productType">Product Type</label>
+
+      <select id="productType" required>
+        <option value="" selected disabled>choose product type</option>
+        <option value="Photobook">Photobook</option>
+        <option value="Layflat Album">Layflat Album</option>
+        <option value="Magazine Album">Magazine Album</option>
+        <option value="Traditional Album">Traditional Album</option>
+        <option value="Mini Album">Mini Album</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="albumSize">Picture Size</label>
+
+        <select id="albumSize" required>
+          <option value="" selected disabled>choose size</option>
+          <option value="7x10">7x10</option>
+          <option value="8x20">8x20</option>
+          <option value="8x24">8x24</option>
+          <option value="10x14">10x14</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="albumQty">Picture / Leaves Qty</label>
+
+        <input
+          type="number"
+          id="albumQty"
+          min="1"
+          placeholder="ex. 20"
+        >
+      </div>
+
+    </div>
+
+    <div class="form-group">
+      <label for="colorTheme">Color Theme / Cover Material</label>
+
+      <select id="colorTheme" required>
+        <option value="" selected disabled>choose color</option>
+
+        <optgroup label="TELA (cloth) - H series">
+          <option value="H01">H01</option>
+          <option value="H02">H02</option>
+          <option value="H03">H03</option>
+          <option value="H04">H04</option>
+          <option value="H05">H05</option>
+          <option value="H06">H06</option>
+          <option value="H07">H07</option>
+          <option value="H08">H08</option>
+          <option value="H09">H09</option>
+          <option value="H10">H10</option>
+          <option value="H11">H11</option>
+          <option value="H12">H12</option>
+          <option value="H13">H13</option>
+          <option value="H14">H14</option>
+          <option value="H15">H15</option>
+        </optgroup>
+
+        <optgroup label="LEATHER - 00 series">
+          <option value="001">001</option>
+          <option value="002">002</option>
+          <option value="003">003</option>
+          <option value="004">004</option>
+          <option value="005">005</option>
+          <option value="006">006</option>
+          <option value="007">007</option>
+          <option value="008">008</option>
+          <option value="009">009</option>
+          <option value="010">010</option>
+        </optgroup>
+
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="albumNote">
+        Additional Info <span class="optional-tag">(optional)</span>
+      </label>
+
+      <textarea
+        id="albumNote"
+        rows="3"
+        placeholder="anything else we need to know about your album..."
+      ></textarea>
+    </div>
+
+  </div>
+
+
+  <!-- print only details -->
+  <div id="printSection" class="hidden">
+
+    <h2 class="panel-title">Print Only Details</h2>
+    <p class="panel-sub">Pick the specs for your prints.</p>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="printSize">Picture Size</label>
+
+        <select id="printSize" required>
+          <option value="" selected disabled>choose size</option>
+          <option value="3R">3R</option>
+          <option value="4R">4R</option>
+          <option value="5R">5R</option>
+          <option value="6R">6R</option>
+          <option value="8R">8R</option>
+          <option value="10R">10R</option>
+          <option value="12R">12R</option>
+          <option value="16R">16R</option>
+          <option value="7x10">7x10</option>
+          <option value="8x10">8x10</option>
+          <option value="8x12">8x12</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="printQty">Quantity</label>
+
+        <input
+          type="number"
+          id="printQty"
+          min="1"
+          placeholder="ex. 5"
+        >
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+      <label>Frame?</label>
+
+      <div class="pill-toggle" id="frameToggle">
+        <button type="button" class="pill-option" data-value="yes">
+          With Frame
+        </button>
+
+        <button type="button" class="pill-option" data-value="no">
+          No Frame
+        </button>
+      </div>
+    </div>
+
+
+    <div id="mattingSection" class="form-group hidden">
+      <label>Matting?</label>
+
+      <div class="pill-toggle" id="mattingToggle">
+        <button type="button" class="pill-option" data-value="yes">
+          With Matting
+        </button>
+
+        <button type="button" class="pill-option" data-value="no">
+          No Matting
+        </button>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label for="printNote">
+        Additional Info <span class="optional-tag">(optional)</span>
+      </label>
+
+      <textarea
+        id="printNote"
+        rows="3"
+        placeholder="anything else we need to know..."
+      ></textarea>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ============ PLACEHOLDER STYLING ============ -->
+<style>
+
+  /* Select placeholders */
+  #productType:invalid,
+  #albumSize:invalid,
+  #colorTheme:invalid,
+  #printSize:invalid {
+    color: #888585;
+    opacity: 0.7;
+  }
+
+  /* Selected values */
+  #productType:valid,
+  #albumSize:valid,
+  #colorTheme:valid,
+  #printSize:valid {
+    color: #333;
+    opacity: 1;
+  }
+
+  /* Number input placeholders */
+  #albumQty::placeholder,
+  #printQty::placeholder,
+  #albumNote::placeholder,
+  #printNote::placeholder {
+    color: #727070;
+    opacity: 0.5;
+  }
+
+</style>
+
+      <!-- ============ STEP 3 - pictures ============ -->
+<div class="step-panel" id="panel3">
+  <h2 class="panel-title">Add Your Pictures</h2>
+  <p class="panel-sub">Paste a Google Drive link or attach files directly.</p>
+
+  <div class="form-group">
+    <label for="gdriveLink">Google Drive Link</label>
+    <input
+      type="text"
+      id="gdriveLink"
+      placeholder="paste your gdrive picture folder link here"
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="pictureUpload" class="upload-btn">+ Add Pictures</label>
+    <input
+      type="file"
+      id="pictureUpload"
+      multiple
+      accept="image/*"
+      class="hidden-input"
+    >
+
+    <p id="fileListText" class="file-list-text">
+      no files selected yet
+    </p>
+  </div>
+</div>
+
+
+<!-- ============ STEP 4 - receipt ============ -->
+<div class="step-panel" id="panel4">
+  <h2 class="panel-title">Order Receipt</h2>
+  <p class="panel-sub">Here's a summary of your order.</p>
+
+  <div id="receiptContent" class="receipt-content"></div>
+
+  <button type="button" id="printBtn" class="outline-btn">
+    Print This Receipt
+  </button>
+</div>
+
+
+<!-- nav buttons -->
+<div class="nav-row">
+  <button type="button" id="backBtn" class="outline-btn hidden">
+    &larr; Back
+  </button>
+
+  <button type="button" id="nextBtn" class="primary-btn">
+    Next &rarr;
+  </button>
+</div>
+
+
+<style>
+  /* Google Drive placeholder */
+  #gdriveLink::placeholder {
+    color: #727070;
+    opacity: 0.5;
+  }
+
+  /* File selection text */
+  #fileListText {
+    color: #727070;
+    opacity: 0.6;
+  }
+</style>
+
+    <footer>
+      <p>&copy; 2026 Paper and Pixels. All rights reserved.</p>
+    </footer>
+
+  </div>
+
+  <script src="form.js"></script>
+</body>
+</html>

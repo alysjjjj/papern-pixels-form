@@ -1,0 +1,375 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f1f1f1;
+  --card-bg: #ffffff;
+  --dark: #949799;
+  --muted: #6a757a; 
+  --accent: #abd7e4;  
+  --accent-dark: #5c8491; 
+  --border: #d8d8d8;
+  --radius-lg: 30px;
+  --radius-md: 16px;
+  --radius-full: 999px;
+}
+
+body {
+   font-family: "Poppins", sans-serif;
+  background-color: var(--bg);
+  color: var(--dark);
+  line-height: 1.5;
+}
+
+.page-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 30px 18px 50px;
+}
+
+/* ---------------- top bar ---------------- */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.logo-pill {
+  background-color: #5c8491;
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.topbar-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+/* fontttttttttttttt */
+
+
+/* ---------------- step indicator ---------------- */
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+  padding: 18px 10px;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.step-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #dae3e6;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.step-item.active .step-circle,
+.step-item.done .step-circle {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.step-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.step-item.active .step-label {
+  color: var(--dark);
+  font-weight: 600;
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background-color: #dddedf;
+  margin: 0 6px;
+  margin-bottom: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.step-line.filled {
+  background-color: var(--accent);
+}
+
+/* ---------------- main card ---------------- */
+.main-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 30px 26px;
+  box-shadow: 0 4px 18px rgba(56, 56, 56, 0.06);
+}
+
+.step-panel {
+  display: none;
+}
+
+.step-panel.active {
+  display: block;
+}
+
+.panel-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: black;
+}
+
+.panel-sub {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-bottom: 22px;
+}
+
+/* ---------------- form fields ---------------- */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-row {
+  display: flex;
+  gap: 14px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 7px;
+  font-size: 0.9rem;
+}
+
+.optional-tag {
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  font-family: inherit;
+  background-color: #fbfaf8;
+}
+
+/* textareas cant be pill shaped, keep them rounded rectangle */
+textarea {
+  border-radius: var(--radius-md);
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ---------------- pill toggle (segmented control) ---------------- */
+.pill-toggle {
+  display: flex;
+  background-color:#eceaea;
+  border-radius: var(--radius-full);
+  padding: 5px;
+  gap: 4px;
+}
+
+.pill-option {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.pill-option.selected {
+  background-color: var(--accent-dark);
+  color: #fff;
+}
+
+/* ---------------- upload button ---------------- */
+.upload-btn {
+  display: inline-block;
+  background-color: #f1efe9;
+  color: var(--dark);
+  padding: 11px 20px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-weight: 600;
+  border: 1.5px dashed var(--accent);
+}
+
+.upload-btn:hover {
+  background-color: #e9e6dd;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.file-list-text {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---------------- receipt ---------------- */
+.receipt-content {
+  background-color: #f9f8f5;
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+
+.receipt-content p {
+  padding: 7px 0;
+  border-bottom: 1px dotted var(--border);
+  font-size: 0.92rem;
+}
+
+.receipt-content p:last-child {
+  border-bottom: none;
+}
+
+.receipt-content strong {
+  display: inline-block;
+  min-width: 170px;
+  color: var(--dark);
+}
+
+/* ---------------- buttons ---------------- */
+.primary-btn {
+  background-color: var(--accent-dark);
+  color: #fff;
+  border: none;
+  padding: 10px 23px;
+  border-radius: var(--radius-full);
+  font-weight: 300;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-left: auto;
+  display: block;
+  border-radius: 50px;
+  font-family: "Poppins", sans-serif;
+}
+
+.primary-btn:hover {
+  background-color: #2f3d63;
+}
+
+.outline-btn {
+  background-color: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--dark);
+  padding: 10px 23px;
+  border-radius: 50px;
+  font-weight: 300;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+}
+
+.outline-btn:hover {
+  background-color: #e0e7f0;
+}
+
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 26px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ---------------- footer ---------------- */
+footer {
+  text-align: center;
+  padding: 24px 10px 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+/* ---------------- responsive ---------------- */
+@media (max-width: 560px) {
+  .main-card {
+    padding: 22px 18px;
+  }
+
+  .step-label {
+    display: none;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .receipt-content strong {
+    display: block;
+    min-width: unset;
+    margin-bottom: 2px;
+  }
+
+  .topbar {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* ---------------- print styles ---------------- */
+@media print {
+  .topbar, .steps, .panel-title, .panel-sub, .nav-row, footer, #printBtn {
+    display: none;
+  }
+
+  .main-card {
+    box-shadow: none;
+    padding: 0;
+  }
+}
