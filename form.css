@@ -80,7 +80,7 @@ body {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background-color: #dae3e6;
+  background-color: #e6dae2;
   color: var(--muted);
   display: flex;
   align-items: center;
@@ -296,7 +296,8 @@ textarea:focus {
 }
 
 .primary-btn:hover {
-  background-color: #2f3d63;
+  background-color: #b2d1db;
+  color: #323333;
 }
 
 .outline-btn {
