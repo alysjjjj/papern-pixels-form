@@ -4,11 +4,11 @@ var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxZY36DLA7bIfrk0NhOlCT
 var currentStep = 1;
 var totalSteps = 4;
 
-var chosenService = null;   // "print" or "album"
-var chosenFrame = null;     // "yes" or "no"
-var chosenMatting = null;   // "yes" or "no"
+var chosenService = null;   
+var chosenFrame = null;     
+var chosenMatting = null;   
 
-var orderSubmitted = false; // so we dont accidentally upload twice
+var orderSubmitted = false;
 
 // ---------- grab elements ----------
 var backBtn = document.getElementById("backBtn");
@@ -25,7 +25,7 @@ var printBtn = document.getElementById("printBtn");
 var receiptContent = document.getElementById("receiptContent");
 var receiptSub = document.getElementById("receiptSub");
 
-// ---------- pill toggle setup (generic function so i dont repeat code) ----------
+
 function setupPillToggle(containerId, onPick) {
   var container = document.getElementById(containerId);
   var buttons = container.querySelectorAll(".pill-option");
@@ -71,8 +71,7 @@ setupPillToggle("mattingToggle", function (value) {
 });
 
 // ---------- folder picker ----------
-// webkitdirectory lets them choose a whole folder, browser gives us every
-// file inside it with webkitRelativePath telling us the folder structure
+
 pictureUpload.addEventListener("change", function () {
   var files = pictureUpload.files;
 
@@ -87,7 +86,7 @@ pictureUpload.addEventListener("change", function () {
   fileListText.textContent = "\"" + folderName + "\" selected — " + files.length + " file(s) ready to upload";
 });
 
-// ---------- step navigation ----------
+
 function showStep(stepNum) {
   for (var i = 1; i <= totalSteps; i++) {
     document.getElementById("panel" + i).classList.remove("active");
@@ -171,15 +170,14 @@ function validateStep(stepNum) {
     return true;
   }
 
-  return true; // step 3 has nothing required, folder + gdrive link are both optional
+  return true; 
 }
 
-// ---------- next / submit / restart button ----------
+
 nextBtn.addEventListener("click", function () {
 
   if (currentStep === 4) {
-    location.reload(); // "Start New Order"
-    return;
+    location.reload(); 
   }
 
   if (!validateStep(currentStep)) {
@@ -187,7 +185,7 @@ nextBtn.addEventListener("click", function () {
   }
 
   if (currentStep === 3) {
-    submitOrder(); // this moves to step 4 itself once it's done
+    submitOrder(); 
     return;
   }
 
@@ -202,9 +200,9 @@ backBtn.addEventListener("click", function () {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-// ---------- gather everything and send it straight to Google Apps Script ----------
+
 function submitOrder() {
-  if (orderSubmitted) return; // stop double clicks from uploading twice
+  if (orderSubmitted) return; 
 
   if (SCRIPT_URL.indexOf("PASTE_YOUR") !== -1) {
     alert("The form isn't connected yet — paste your Apps Script Web app URL into form.js first.");
@@ -219,7 +217,7 @@ function submitOrder() {
   formData.append("serviceType", chosenService);
   formData.append("gdriveLink", gdriveLink);
 
-  var summaryRows = []; // used later to print the on-screen receipt
+  var summaryRows = []; 
 
   summaryRows.push(["Customer Name", fullName]);
   summaryRows.push(["Service Type", chosenService === "album" ? "PRINT AND ALBUM" : "PRINT ONLY"]);
@@ -277,7 +275,7 @@ function submitOrder() {
   var today = new Date();
   summaryRows.push(["Order Date", today.toLocaleDateString()]);
 
-  // show a loading state while everything uploads
+  // show a loading 
   currentStep = 4;
   showStep(currentStep);
   nextBtn.disabled = true;
@@ -330,5 +328,5 @@ printBtn.addEventListener("click", function () {
   window.print();
 });
 
-// kick things off on the first step
+
 showStep(currentStep);
