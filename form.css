@@ -204,12 +204,16 @@ textarea:focus {
 /* ---------------- pill togg ---------------- */
 .pill-toggle {
   display: flex;
-  background-color:#eceaea;
+  background-color: #f1f1f1;
   border-radius: var(--radius-full);
   padding: 5px;
   gap: 4px;
 }
 
+.pill-option:hover {
+  background-color: #e3e8ec;
+
+}
 .pill-option {
   flex: 1;
   border: none;
@@ -217,7 +221,7 @@ textarea:focus {
   padding: 10px 14px;
   border-radius: var(--radius-full);
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--muted);
   cursor: pointer;
   font-family: "Poppins", sans-serif;

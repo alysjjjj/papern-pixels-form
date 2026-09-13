@@ -20,7 +20,7 @@
       <span class="topbar-sub">Album &amp; Photo Printing</span>
     </div>
 
-  
+
     <div class="steps" id="stepsIndicator">
       <div class="step-item active" data-step="1">
         <div class="step-circle">1</div>
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-   
+
     <div class="main-card">
 
       <!-- ============  name + service type ============ -->
@@ -88,11 +88,11 @@
 
       <select id="productType" required>
         <option value="" selected disabled>choose product type</option>
-        <option value="Photobook">Photobook</option>
+        <option value="Photobook">Cute Album</option>
         <option value="Layflat Album">Layflat Album</option>
-        <option value="Magazine Album">Magazine Album</option>
+        <!-- <option value="Magazine Album">Magazine Album</option>
         <option value="Traditional Album">Traditional Album</option>
-        <option value="Mini Album">Mini Album</option>
+        <option value="Mini Album">Mini Album</option> -->
       </select>
     </div>
 
@@ -300,10 +300,10 @@
       <!-- ============ pictures ============ -->
 <div class="step-panel" id="panel3">
   <h2 class="panel-title">Add Your Pictures</h2>
-  <p class="panel-sub">Paste a Google Drive link or attach files directly.</p>
+  <p class="panel-sub">Select the whole folder of pictures from your computer. We'll also save it straight to our Drive under your name, so a Google Drive link is optional if you'd rather just share that instead.</p>
 
   <div class="form-group">
-    <label for="gdriveLink">Google Drive Link</label>
+    <label for="gdriveLink">Google Drive Link <span class="optional-tag">(optional, if you already have one)</span></label>
     <input
       type="text"
       id="gdriveLink"
@@ -312,17 +312,19 @@
   </div>
 
   <div class="form-group">
-    <label for="pictureUpload" class="upload-btn">+ Add Pictures</label>
+    <label for="pictureUpload" class="upload-btn">+ Choose Picture Folder</label>
+    <!-- webkitdirectory + directory = lets the user select a whole folder instead of picking files one by one -->
     <input
       type="file"
       id="pictureUpload"
+      webkitdirectory
+      directory
       multiple
-      accept="image/*"
       class="hidden-input"
     >
 
     <p id="fileListText" class="file-list-text">
-      no files selected yet
+      no folder selected yet
     </p>
   </div>
 </div>
@@ -331,7 +333,7 @@
 <!-- ============  receipt ============ -->
 <div class="step-panel" id="panel4">
   <h2 class="panel-title">Order Receipt</h2>
-  <p class="panel-sub">Here's a summary of your order.</p>
+  <p class="panel-sub" id="receiptSub">Here's a summary of your order.</p>
 
   <div id="receiptContent" class="receipt-content"></div>
 

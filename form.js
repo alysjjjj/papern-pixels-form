@@ -1,13 +1,14 @@
-// cahtgpt queen ubos dagat sayo
+
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxZY36DLA7bIfrk0NhOlCTKdlZC4ipCt9t7LeTMGa0lriBcI8G1iLYmiSLd94sviuyIFg/exec";
+
 var currentStep = 1;
 var totalSteps = 4;
 
-// track the pill toggle choices here since they are just buttons, not real radios
 var chosenService = null;   // "print" or "album"
 var chosenFrame = null;     // "yes" or "no"
 var chosenMatting = null;   // "yes" or "no"
 
-var selectedFiles = []; // holds picked file names
+var orderSubmitted = false; // so we dont accidentally upload twice
 
 // ---------- grab elements ----------
 var backBtn = document.getElementById("backBtn");
@@ -22,6 +23,7 @@ var fileListText = document.getElementById("fileListText");
 
 var printBtn = document.getElementById("printBtn");
 var receiptContent = document.getElementById("receiptContent");
+var receiptSub = document.getElementById("receiptSub");
 
 // ---------- pill toggle setup (generic function so i dont repeat code) ----------
 function setupPillToggle(containerId, onPick) {
@@ -30,7 +32,6 @@ function setupPillToggle(containerId, onPick) {
 
   buttons.forEach(function (btn) {
     btn.addEventListener("click", function () {
-      // clear selected class from siblings first
       buttons.forEach(function (b) {
         b.classList.remove("selected");
       });
@@ -58,7 +59,6 @@ setupPillToggle("frameToggle", function (value) {
   } else {
     mattingSection.classList.add("hidden");
     chosenMatting = null;
-    // also un-select the matting buttons if frame gets turned off
     var mattingButtons = document.querySelectorAll("#mattingToggle .pill-option");
     mattingButtons.forEach(function (b) {
       b.classList.remove("selected");
@@ -70,29 +70,30 @@ setupPillToggle("mattingToggle", function (value) {
   chosenMatting = value;
 });
 
-// ---------- picture upload ----------
+// ---------- folder picker ----------
+// webkitdirectory lets them choose a whole folder, browser gives us every
+// file inside it with webkitRelativePath telling us the folder structure
 pictureUpload.addEventListener("change", function () {
-  selectedFiles = [];
-  for (var i = 0; i < pictureUpload.files.length; i++) {
-    selectedFiles.push(pictureUpload.files[i].name);
+  var files = pictureUpload.files;
+
+  if (files.length === 0) {
+    fileListText.textContent = "no folder selected yet";
+    return;
   }
 
-  if (selectedFiles.length === 0) {
-    fileListText.textContent = "no files selected yet";
-  } else {
-    fileListText.textContent = selectedFiles.length + " file(s) selected: " + selectedFiles.join(", ");
-  }
+  var firstPath = files[0].webkitRelativePath || files[0].name;
+  var folderName = firstPath.split("/")[0];
+
+  fileListText.textContent = "\"" + folderName + "\" selected — " + files.length + " file(s) ready to upload";
 });
 
 // ---------- step navigation ----------
 function showStep(stepNum) {
-  // hide all panels then show the one we want
   for (var i = 1; i <= totalSteps; i++) {
     document.getElementById("panel" + i).classList.remove("active");
   }
   document.getElementById("panel" + stepNum).classList.add("active");
 
-  // update the step circles at the top
   var stepItems = document.querySelectorAll(".step-item");
   stepItems.forEach(function (item) {
     var num = parseInt(item.getAttribute("data-step"));
@@ -104,7 +105,6 @@ function showStep(stepNum) {
     }
   });
 
-  // update the connecting lines
   var lines = document.querySelectorAll(".step-line");
   lines.forEach(function (line) {
     var lineNum = parseInt(line.getAttribute("data-line"));
@@ -115,16 +115,14 @@ function showStep(stepNum) {
     }
   });
 
-  // back button hidden on first step
-  if (stepNum === 1) {
+  if (stepNum === 1 || orderSubmitted) {
     backBtn.classList.add("hidden");
   } else {
     backBtn.classList.remove("hidden");
   }
 
-  // change next button text depending on step
   if (stepNum === 3) {
-    nextBtn.textContent = "Generate Receipt";
+    nextBtn.textContent = "Submit Order →";
   } else if (stepNum === 4) {
     nextBtn.textContent = "Start New Order";
   } else {
@@ -173,25 +171,24 @@ function validateStep(stepNum) {
     return true;
   }
 
-  // step 3 (pictures) has no required fields, gdrive link is optional too
-  return true;
+  return true; // step 3 has nothing required, folder + gdrive link are both optional
 }
 
-// ---------- next / generate receipt / restart button ----------
+// ---------- next / submit / restart button ----------
 nextBtn.addEventListener("click", function () {
 
   if (currentStep === 4) {
-    // this is now the "Start New Order" button, just reload the page
-    location.reload();
+    location.reload(); // "Start New Order"
     return;
   }
 
   if (!validateStep(currentStep)) {
-    return; // stop here if something is missing
+    return;
   }
 
   if (currentStep === 3) {
-    buildReceipt();
+    submitOrder(); // this moves to step 4 itself once it's done
+    return;
   }
 
   currentStep++;
@@ -205,14 +202,27 @@ backBtn.addEventListener("click", function () {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-// ---------- build the receipt html ----------
-function buildReceipt() {
+// ---------- gather everything and send it straight to Google Apps Script ----------
+function submitOrder() {
+  if (orderSubmitted) return; // stop double clicks from uploading twice
+
+  if (SCRIPT_URL.indexOf("PASTE_YOUR") !== -1) {
+    alert("The form isn't connected yet — paste your Apps Script Web app URL into form.js first.");
+    return;
+  }
+
   var fullName = document.getElementById("fullName").value.trim();
   var gdriveLink = document.getElementById("gdriveLink").value.trim();
 
-  var html = "";
-  html += "<p><strong>Customer Name:</strong> " + fullName + "</p>";
-  html += "<p><strong>Service Type:</strong> " + (chosenService === "album" ? "PRINT AND ALBUM" : "PRINT ONLY") + "</p>";
+  var formData = new FormData();
+  formData.append("fullName", fullName);
+  formData.append("serviceType", chosenService);
+  formData.append("gdriveLink", gdriveLink);
+
+  var summaryRows = []; // used later to print the on-screen receipt
+
+  summaryRows.push(["Customer Name", fullName]);
+  summaryRows.push(["Service Type", chosenService === "album" ? "PRINT AND ALBUM" : "PRINT ONLY"]);
 
   if (chosenService === "album") {
     var productType = document.getElementById("productType").value;
@@ -221,37 +231,96 @@ function buildReceipt() {
     var albumQty = document.getElementById("albumQty").value;
     var albumNote = document.getElementById("albumNote").value.trim();
 
-    html += "<p><strong>Product Type:</strong> " + productType + "</p>";
-    html += "<p><strong>Picture Size:</strong> " + albumSize + "</p>";
-    html += "<p><strong>Color Theme:</strong> " + colorTheme + "</p>";
-    html += "<p><strong>Picture/Leaves Qty:</strong> " + albumQty + "</p>";
-    html += "<p><strong>Additional Info:</strong> " + (albumNote === "" ? "none" : albumNote) + "</p>";
+    formData.append("productType", productType);
+    formData.append("pictureSize", albumSize);
+    formData.append("colorTheme", colorTheme);
+    formData.append("quantity", albumQty);
+    formData.append("additionalInfo", albumNote);
+
+    summaryRows.push(["Product Type", productType]);
+    summaryRows.push(["Picture Size", albumSize]);
+    summaryRows.push(["Color Theme", colorTheme]);
+    summaryRows.push(["Picture/Leaves Qty", albumQty]);
+    summaryRows.push(["Additional Info", albumNote || "none"]);
   } else {
     var printSize = document.getElementById("printSize").value;
     var printQty = document.getElementById("printQty").value;
     var printNote = document.getElementById("printNote").value.trim();
 
-    html += "<p><strong>Picture Size:</strong> " + printSize + "</p>";
-    html += "<p><strong>Frame:</strong> " + (chosenFrame === "yes" ? "Yes" : "No") + "</p>";
+    formData.append("pictureSize", printSize);
+    formData.append("quantity", printQty);
+    formData.append("frame", chosenFrame === "yes" ? "Yes" : "No");
+    formData.append("matting", chosenFrame === "yes" ? (chosenMatting === "yes" ? "Yes" : "No") : "N/A");
+    formData.append("additionalInfo", printNote);
 
+    summaryRows.push(["Picture Size", printSize]);
+    summaryRows.push(["Frame", chosenFrame === "yes" ? "Yes" : "No"]);
     if (chosenFrame === "yes") {
-      html += "<p><strong>Matting:</strong> " + (chosenMatting === "yes" ? "Yes" : "No") + "</p>";
+      summaryRows.push(["Matting", chosenMatting === "yes" ? "Yes" : "No"]);
     }
-
-    html += "<p><strong>Quantity:</strong> " + printQty + "</p>";
-    html += "<p><strong>Additional Info:</strong> " + (printNote === "" ? "none" : printNote) + "</p>";
+    summaryRows.push(["Quantity", printQty]);
+    summaryRows.push(["Additional Info", printNote || "none"]);
   }
 
-  html += "<p><strong>Google Drive Link:</strong> " + (gdriveLink === "" ? "not provided" : gdriveLink) + "</p>";
+  summaryRows.push(["Google Drive Link (pasted)", gdriveLink || "not provided"]);
 
-  if (selectedFiles.length > 0) {
-    html += "<p><strong>Uploaded Pictures:</strong> " + selectedFiles.join(", ") + "</p>";
-  } else {
-    html += "<p><strong>Uploaded Pictures:</strong> none</p>";
+  // attach every file from the chosen folder, plus its relative path
+  // so the script can rebuild the same folder structure inside Drive
+  var files = pictureUpload.files;
+  for (var i = 0; i < files.length; i++) {
+    formData.append("pictures", files[i]);
+    formData.append("relativePaths", files[i].webkitRelativePath || files[i].name);
   }
+
+  summaryRows.push(["Pictures Uploaded", files.length > 0 ? files.length + " file(s)" : "none"]);
 
   var today = new Date();
-  html += "<p><strong>Order Date:</strong> " + today.toLocaleDateString() + "</p>";
+  summaryRows.push(["Order Date", today.toLocaleDateString()]);
+
+  // show a loading state while everything uploads
+  currentStep = 4;
+  showStep(currentStep);
+  nextBtn.disabled = true;
+  backBtn.classList.add("hidden");
+  receiptSub.textContent = "Uploading your order, please wait...";
+  receiptContent.innerHTML = "<div class='upload-status' id='uploadStatus'>Sending your pictures to Drive and saving your order... this can take a bit if you have a lot of photos.</div>";
+
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    body: formData
+  })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      nextBtn.disabled = false;
+      orderSubmitted = true;
+
+      if (data.success) {
+        receiptSub.textContent = "Your order was saved. Here's a summary of your order.";
+        renderReceiptTable(summaryRows, data.folderLink);
+      } else {
+        receiptSub.textContent = "Something went wrong.";
+        receiptContent.innerHTML = "<div class='upload-status error'>We couldn't save your order (" + (data.error || "unknown error") + "). Please try again or contact us directly.</div>";
+      }
+    })
+    .catch(function (err) {
+      nextBtn.disabled = false;
+      receiptSub.textContent = "Something went wrong.";
+      receiptContent.innerHTML = "<div class='upload-status error'>Could not reach the server. Please check your internet connection and try again.</div>";
+      console.error(err);
+    });
+}
+
+function renderReceiptTable(rows, folderLink) {
+  var html = "";
+  rows.forEach(function (pair) {
+    html += "<p><strong>" + pair[0] + ":</strong> " + pair[1] + "</p>";
+  });
+
+  if (folderLink) {
+    html += "<p><strong>Your Drive Folder:</strong> <a href='" + folderLink + "' target='_blank'>Open Folder</a></p>";
+  }
 
   receiptContent.innerHTML = html;
 }
